@@ -64,7 +64,7 @@ class BookingControllerTest extends TestCase
                 'doctor_id' => $doctor->id,
                 'date' => $date,
                 'user_id' => $this->loginUser->id,
-                'status' => Booking::STATUS_CREATED
+                'status' => Booking::STATUS_CONFIRMED
             ])
             ->assertJsonStructure([
                 'id',
@@ -81,8 +81,20 @@ class BookingControllerTest extends TestCase
         $booking = Booking::factory()
             ->create();
             
-        $this->deleteJson("/api/bookings/{$booking->id}")
-            ->assertStatus(Response::HTTP_NO_CONTENT);
+        $this->patchJson("/api/bookings/{$booking->id}")
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJsonFragment([
+                'id' => $booking->id,
+                'status' => Booking::STATUS_CANCELED
+            ])
+            ->assertJsonStructure([
+                'id',
+                'doctor_id',
+                'user_id',
+                'date',
+                'status'
+            ]);
+            ;
     }
 }
 

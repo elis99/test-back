@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\AuthController;
@@ -31,7 +30,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'bookings'], function () {
         Route::get('/', [BookingController::class, 'index']);
         Route::post('/', [BookingController::class, 'create']);
-        Route::delete('/{booking}', [BookingController::class, 'cancel']);
+        Route::patch('/{booking}', [BookingController::class, 'cancel']);
     });
 });
 

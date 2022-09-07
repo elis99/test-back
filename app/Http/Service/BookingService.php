@@ -18,6 +18,7 @@ final class BookingService
     {
         return Booking::query()
             ->select('id', 'doctor_id', 'user_id', 'date', 'status')
+            ->orderBy('date', 'DESC')
             ->get();
     }
 
@@ -28,7 +29,7 @@ final class BookingService
         $booking = new Booking();
         $booking->date = $date;
         $booking->doctor_id = $doctorId;
-        $booking->status = Booking::STATUS_CREATED;
+        $booking->status = Booking::STATUS_CONFIRMED;
         $booking->user()
             ->associate($authUser);
       
@@ -37,8 +38,11 @@ final class BookingService
         return $booking;
     }
 
-    public function cancel(Booking $booking): void
+    public function cancel(Booking $booking): Booking
     {
-        $booking->delete();
+        $booking->status = Booking::STATUS_CANCELED;
+        $booking->save();
+
+        return $booking;
     }
 }

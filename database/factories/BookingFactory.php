@@ -27,7 +27,7 @@ class BookingFactory extends Factory
             'user_id' => User::factory(),
             'doctor_id' => Doctor::factory() ,
             'date' => $this->faker->date,
-            'status' => Booking::STATUS_CREATED
+            'status' => Booking::STATUS_CONFIRMED
         ];
     }
 }

@@ -9,7 +9,8 @@ class Booking extends Model
 {
     use HasFactory;
 
-    public const STATUS_CREATED = 'Created';
+    public const STATUS_CONFIRMED = 'Confirmed';
+    public const STATUS_CANCELED = 'Canceled';
 
     public const DATE_FORMAT = 'Y-m-d H:i:s';
     

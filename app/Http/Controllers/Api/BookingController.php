@@ -33,8 +33,8 @@ final class BookingController extends Controller
 
     public function cancel(Booking $booking)
     {
-        $this->bookingService->cancel($booking);
+        $booking = $this->bookingService->cancel($booking);
         
-        return response()->json(null, Response::HTTP_NO_CONTENT);
+        return response()->json(BookingResource::make($booking), Response::HTTP_OK);
     }
 }
