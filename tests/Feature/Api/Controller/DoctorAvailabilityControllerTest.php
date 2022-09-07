@@ -50,9 +50,9 @@ class DoctorAvailabilityControllerTest extends TestCase
 
     public function testGetDoctolibList()
     {
-        $doctor = Doctor::factory([
-            'agenda' => Doctor::AGENDA_DOCTOLIB
-        ])->create();
+        $doctor = Doctor::factory()
+        ->withAgenda(Doctor::AGENDA_DOCTOLIB)
+        ->create();
 
         $this->actingAs($this->loginUser);
 
@@ -67,9 +67,9 @@ class DoctorAvailabilityControllerTest extends TestCase
 
     public function testGetClicRDVList()
     {
-        $doctor = Doctor::factory([
-            'agenda' => Doctor::AGENDA_CLICRDV
-        ])->create();
+        $doctor = Doctor::factory()
+            ->withAgenda(Doctor::AGENDA_CLICRDV)
+            ->create();
 
         $this->actingAs($this->loginUser);
 

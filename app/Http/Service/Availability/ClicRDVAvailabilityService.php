@@ -18,7 +18,7 @@ final class ClicRDVAvailabilityService implements AvailabilityInterface
     
     public function getList(Doctor $doctor)
     {
-        $requestUrl = str_replace('{EXTERNAL_ID}', $doctor->id, $this->apiUrl);
+        $requestUrl = str_replace('{EXTERNAL_ID}', $doctor->external_agenda_id, $this->apiUrl);
         $response = $this->client->get($requestUrl);
 
         if ($response->getStatusCode() !== Response::HTTP_OK) {
