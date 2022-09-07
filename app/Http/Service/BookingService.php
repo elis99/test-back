@@ -2,7 +2,6 @@
 
 namespace App\Http\Service;
 
-use App\Models\Doctor;
 use DateTimeImmutable;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +16,6 @@ final class BookingService
     
     public function getList(): Collection
     {
-        dd(11);
         return Booking::query()
             ->select('id', 'doctor_id', 'user_id', 'date', 'status')
             ->get();
