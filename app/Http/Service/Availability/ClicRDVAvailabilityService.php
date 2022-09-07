@@ -6,8 +6,9 @@ use App\Models\Doctor;
 use GuzzleHttp\Client;
 use Illuminate\Http\Response;
 use App\Exceptions\AvailibilityApiException;
+use App\Http\DTO\AvailabilityDTO;
 
-final class ClicRDVAvailabilityService implements AvailabilityInterface
+final class ClicRDVAvailabilityService extends AbstractAvailability
 {
     private $client;
 
@@ -15,8 +16,11 @@ final class ClicRDVAvailabilityService implements AvailabilityInterface
     {
         $this->client = new Client();
     }
-    
-    public function getList(Doctor $doctor)
+
+    /**
+     * @return AvailabilityDTO[]
+     */
+    public function getList(Doctor $doctor): array 
     {
         $requestUrl = str_replace('{EXTERNAL_ID}', $doctor->external_agenda_id, $this->apiUrl);
         $response = $this->client->get($requestUrl);
@@ -24,8 +28,8 @@ final class ClicRDVAvailabilityService implements AvailabilityInterface
         if ($response->getStatusCode() !== Response::HTTP_OK) {
             throw new AvailibilityApiException('ClicRDV', $response->getStatusCode(), $response->getBody());
         }
-        $data = json_decode($response->getBody());
+        $data = json_decode($response->getBody(), true);
 
-        return $data;
+        return $this->prepareDto($data);
     }
 }

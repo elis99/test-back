@@ -4,12 +4,19 @@ namespace App\Http\Service\Availability;
 
 use App\Models\Doctor;
 use App\Models\Availability;
+use App\Http\DTO\AvailabilityDTO;
 
-final class DatabaseAvailabilityService implements AvailabilityInterface
+final class DatabaseAvailabilityService extends AbstractAvailability
 {
-    public function getList(Doctor $doctor)
+    /**
+     * @return AvailabilityDTO[]
+     */
+    public function getList(Doctor $doctor): array
     {
-        return Availability::where('doctor_id', $doctor->id)
-            ->get();
+        $data = Availability::where('doctor_id', $doctor->id)
+            ->get()
+            ->toArray();
+
+        return $this->prepareDto($data);
     }
 }

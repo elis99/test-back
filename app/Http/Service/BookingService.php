@@ -2,39 +2,30 @@
 
 namespace App\Http\Service;
 
+use App\Models\User;
 use DateTimeImmutable;
 use App\Models\Booking;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
-use App\Http\Service\Availability\AvailabilityRegistry;
 
 final class BookingService
-{    
-    public function __construct(private AvailabilityRegistry $availabilityRegistry)
-    {  
-    }
-    
-    public function getList(): Collection
+{        
+    public function getList(User $user): Collection
     {
-        $authUser = Auth::user();
-
         return Booking::query()
             ->select('id', 'doctor_id', 'user_id', 'date', 'status')
-            ->where('user_id', $authUser->id)
+            ->where('user_id', $user->id)
             ->orderBy('date', 'DESC')
             ->get();
     }
 
-    public function create(int $doctorId, DateTimeImmutable $date): Booking 
+    public function create(User $user, int $doctorId, DateTimeImmutable $date): Booking 
     {
-        $authUser = Auth::user();
-
         $booking = new Booking();
         $booking->date = $date;
         $booking->doctor_id = $doctorId;
         $booking->status = Booking::STATUS_CONFIRMED;
         $booking->user()
-            ->associate($authUser);
+            ->associate($user);
       
         $booking->save();
 

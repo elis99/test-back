@@ -8,14 +8,14 @@ final class AvailabilityRegistry
 {
     private $handlers = [];
 
-    public function register($name, AvailabilityInterface $instance) 
+    public function register($name, AbstractAvailability $instance) 
     {
         $this->handlers[$name] = $instance;
 
         return $this;
     }
   
-    public function get($name): AvailabilityInterface
+    public function get($name): AbstractAvailability
     {
         if (!array_key_exists($name, $this->handlers)) {
             throw new Exception('No handler found.');
