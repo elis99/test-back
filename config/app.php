@@ -56,6 +56,11 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'availability_api' => [
+        'doctolib' => 'https://tech-test.joovence.dev/api/doctolib/{EXTERNAL_ID}/availabilities',
+        'clicrdv' => 'https://tech-test.joovence.dev/api/clic-rdv/availabilities?proId={EXTERNAL_ID}'
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -174,7 +179,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        App\Providers\AvailabilityServiceProvider::class
     ],
 
     /*

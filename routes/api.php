@@ -2,6 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\DoctorController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\DoctorAvailabilitiesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +17,21 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    Route::group(['prefix' => '/doctors'], function () {
+        Route::get('/', [DoctorController::class, 'index']);
+        Route::get('/{doctor}/availabilities', [DoctorAvailabilitiesController::class, 'index']);
+    });
+
+    Route::group(['prefix' => 'bookings'], function () {
+        Route::get('/', [BookingController::class, 'index']);
+        Route::post('/', [BookingController::class, 'create']);
+        Route::delete('/{booking}', [BookingController::class, 'cancel']);
+    });
 });
+
