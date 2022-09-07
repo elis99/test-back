@@ -16,8 +16,11 @@ final class BookingService
     
     public function getList(): Collection
     {
+        $authUser = Auth::user();
+
         return Booking::query()
             ->select('id', 'doctor_id', 'user_id', 'date', 'status')
+            ->where('user_id', $authUser->id)
             ->orderBy('date', 'DESC')
             ->get();
     }

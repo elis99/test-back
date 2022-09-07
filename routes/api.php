@@ -30,7 +30,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'bookings'], function () {
         Route::get('/', [BookingController::class, 'index']);
         Route::post('/', [BookingController::class, 'create']);
-        Route::patch('/{booking}', [BookingController::class, 'cancel']);
+        Route::get('/{booking}/cancel', [BookingController::class, 'cancel']);
     });
 });
 

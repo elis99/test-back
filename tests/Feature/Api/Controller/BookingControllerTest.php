@@ -27,9 +27,14 @@ class BookingControllerTest extends TestCase
     public function testGetIndex()
     {
         $this->actingAs($this->loginUser);
-        Booking::factory()
-            ->count(3)
+        $otherUserBookings = Booking::factory()
+            ->count(2)
             ->create();
+        $loggedInUserBookings = Booking::factory()
+            ->count(2)
+            ->create([
+                'user_id' => $this->loginUser->id
+            ]);
 
         $this->getJson('/api/bookings')
             ->assertStatus(Response::HTTP_OK)
@@ -42,7 +47,7 @@ class BookingControllerTest extends TestCase
                 'status'
                ]
             ])
-            ->assertJsonCount(3);
+            ->assertJsonCount(2);
     }
 
     public function testCanCreate()
@@ -79,9 +84,11 @@ class BookingControllerTest extends TestCase
     {
         $this->actingAs($this->loginUser);
         $booking = Booking::factory()
-            ->create();
+            ->create([
+                'user_id' => $this->loginUser->id
+            ]);
             
-        $this->patchJson("/api/bookings/{$booking->id}")
+        $this->getJson("/api/bookings/{$booking->id}/cancel")
             ->assertStatus(Response::HTTP_OK)
             ->assertJsonFragment([
                 'id' => $booking->id,
@@ -94,6 +101,17 @@ class BookingControllerTest extends TestCase
                 'date',
                 'status'
             ]);
+            ;
+    }
+
+    public function testCanNotCancelOtherUserBooking()
+    {
+        $this->actingAs($this->loginUser);
+        $booking = Booking::factory()
+            ->create();
+            
+        $this->getJson("/api/bookings/{$booking->id}/cancel")
+            ->assertStatus(Response::HTTP_FORBIDDEN)
             ;
     }
 }
